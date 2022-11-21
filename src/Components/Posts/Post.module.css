@@ -36,7 +36,6 @@
 .authorInfo {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .authorInfo strong {

@@ -1,37 +1,50 @@
 import React from "react";
-import { Comment } from "../Coment/Comment";
-import styles from "./Post.module.css";
-import { Avatar } from "../Avatar/Avatar";
+import { format, formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-export function Post() {
+import { Avatar } from "../Avatar/Avatar";
+import { Comment } from "../Coment/Comment";
+
+import styles from "./Post.module.css";
+
+export function Post({ author, content, publishedAt }) {
+  const dateFormatted = format(publishedAt, "dd 'de' LLLL 'às' HH:mm'h'", {
+    locale: ptBR,
+  });
+
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  });
+
   return (
     <article className={styles.post}>
       <header className={styles.header}>
         <div className={styles.author}>
-          <Avatar src="https://lh3.googleusercontent.com/a/ALm5wu1ngu0I-aXVKOsRE9zKRPN2rgRbAI7fTBcBIoVx=s288-p-rw-no" />
+          <Avatar src={author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>Caleb Lima</strong>
-            <span>Web Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
-        <time title="17 de novembro de 2022" dateTime="2022-11-17 21:31:00">
-          Publicado há 1h
+        <time title={dateFormatted} dateTime={publishedAt.toISOString()}>
+          {publishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa 👋</p>
-        <p>Lancei braba com Node.js, segue o link:</p>
-        <p>
-          <a href="https://github.com/jovemcleb/blogs-api" target="_blank">
-            Blogs API
-          </a>
-        </p>
-        <p>
-          <a href="">#novoprojeto</a> <a href="">#APIdeBlog</a>{" "}
-          <a href="">#theProject</a>{" "}
-        </p>
+        {content.map(({ type, content }) => {
+          if (type === "paragraph") {
+            return <p>{content}</p>;
+          } else if (type === "link") {
+            return (
+              <p>
+                <a href={content}>{content}</a>
+              </p>
+            );
+          }
+        })}
       </div>
 
       <form className={styles.commentForm}>
