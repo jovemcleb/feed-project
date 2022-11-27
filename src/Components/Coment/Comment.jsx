@@ -4,7 +4,11 @@ import { Avatar } from "../Avatar/Avatar";
 import styles from "./Comment.module.css";
 import goreh from "../../Assets/goreh.jpg";
 
-export function Comment({ nameUser }) {
+export function Comment({ content, deleteComment }) {
+  const handleDeleteComment = () => {
+    deleteComment(content);
+  };
+
   return (
     <div className={styles.comment}>
       <Avatar hasBorder={false} src={goreh} />
@@ -13,7 +17,7 @@ export function Comment({ nameUser }) {
         <div className={styles.commentContent}>
           <header>
             <div className={styles.authorAndTime}>
-              <strong>{nameUser}</strong>
+              <strong></strong>
               <time
                 title="17 de novembro de 2022"
                 dateTime="2022-11-17 21:31:00"
@@ -22,11 +26,14 @@ export function Comment({ nameUser }) {
               </time>
             </div>
 
-            <button title="Excluir comentário">
+            <button
+              onClick={() => handleDeleteComment()}
+              title="Excluir comentário"
+            >
               <Trash size={22} />
             </button>
           </header>
-          <p>Muito bom Caleb, parabéns!! 👏👏</p>
+          <p>{content}</p>
         </div>
         <footer>
           <button>
