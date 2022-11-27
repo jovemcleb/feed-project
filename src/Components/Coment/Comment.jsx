@@ -1,28 +1,44 @@
 import { ThumbsUp, Trash } from "phosphor-react";
-import React from "react";
+import React, { useState } from "react";
 import { Avatar } from "../Avatar/Avatar";
 import styles from "./Comment.module.css";
-import goreh from "../../Assets/goreh.jpg";
+import noneUser from "../../Assets/images.png";
+import { format, formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-export function Comment({ content, deleteComment }) {
+export function Comment({ comment, deleteComment }) {
+  const { content, dateComment } = comment;
+
+  const dateFormatted = format(dateComment, "dd 'de' LLLL 'às' HH:mm'h'", {
+    locale: ptBR,
+  });
+
+  const publishedDateRelativeToNow = formatDistanceToNow(dateComment, {
+    locale: ptBR,
+    addSuffix: true,
+  });
+
+  const [likeCount, setLikeCount] = useState(0);
+
   const handleDeleteComment = () => {
-    deleteComment(content);
+    deleteComment(comment.content);
+  };
+
+  const handleLikeComment = () => {
+    setLikeCount((state) => state + 1);
   };
 
   return (
     <div className={styles.comment}>
-      <Avatar hasBorder={false} src={goreh} />
+      <Avatar hasBorder={false} src={noneUser} />
 
       <div className={styles.commentBox}>
         <div className={styles.commentContent}>
           <header>
             <div className={styles.authorAndTime}>
               <strong></strong>
-              <time
-                title="17 de novembro de 2022"
-                dateTime="2022-11-17 21:31:00"
-              >
-                Cerca de 1h atrás
+              <time title={dateFormatted} dateTime={dateComment.toISOString()}>
+                {publishedDateRelativeToNow}
               </time>
             </div>
 
@@ -33,12 +49,12 @@ export function Comment({ content, deleteComment }) {
               <Trash size={22} />
             </button>
           </header>
-          <p>{content}</p>
+          <p>{comment.content}</p>
         </div>
         <footer>
-          <button>
+          <button onClick={handleLikeComment}>
             <ThumbsUp />
-            Curtir <span>20</span>
+            Curtir <span>{likeCount}</span>
           </button>
         </footer>
       </div>

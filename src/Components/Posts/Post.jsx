@@ -8,7 +8,13 @@ import { Comment } from "../Coment/Comment";
 import styles from "./Post.module.css";
 
 export function Post({ author, content, publishedAt }) {
-  const [comments, setComments] = useState(["Show de bola!!!"]);
+  const [comments, setComments] = useState([
+    {
+      dateComment: new Date(),
+      content: "Show de bola!!!",
+    },
+  ]);
+
   const [newCommentText, setNewCommentText] = useState("");
 
   const dateFormatted = format(publishedAt, "dd 'de' LLLL 'às' HH:mm'h'", {
@@ -22,7 +28,13 @@ export function Post({ author, content, publishedAt }) {
 
   const handleCreateNewComment = (e) => {
     e.preventDefault();
-    setComments([...comments, newCommentText]);
+    setComments((state) => [
+      ...state,
+      {
+        dateComment: new Date(),
+        content: newCommentText,
+      },
+    ]);
     setNewCommentText("");
   };
 
@@ -37,7 +49,7 @@ export function Post({ author, content, publishedAt }) {
 
   const deleteComment = (commentToDelete) => {
     const newComments = comments.filter(
-      (comment) => comment !== commentToDelete
+      (comment) => comment.content !== commentToDelete
     );
     setComments(newComments);
   };
@@ -94,8 +106,8 @@ export function Post({ author, content, publishedAt }) {
       <div className={styles.commentList}>
         {comments.map((comment) => (
           <Comment
-            key={comment}
-            content={comment}
+            key={comment.content}
+            comment={comment}
             deleteComment={deleteComment}
           />
         ))}
