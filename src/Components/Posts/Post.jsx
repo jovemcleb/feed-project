@@ -8,12 +8,15 @@ import { Comment } from "../Coment/Comment";
 import styles from "./Post.module.css";
 
 export function Post({ author, content, publishedAt }) {
-  const [comments, setComments] = useState([
-    {
-      dateComment: new Date(),
-      content: "Show de bola!!!",
-    },
-  ]);
+  // Estrutura de comments
+  // [
+  //   {
+  //     dateComment: new Date(),
+  //     content: "Show de bola!!!",
+  //   },
+  // ]
+
+  const [comments, setComments] = useState([]);
 
   const [newCommentText, setNewCommentText] = useState("");
 
